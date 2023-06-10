@@ -37,7 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'gestion_ville'
+    'gestion_ville',
+    'django.contrib.gis',
+    'leaflet',
+    'django_google_maps',
+    'mapwidget',
+    #'crispy_forms'
+    
+
 ]
 
 MIDDLEWARE = [
@@ -55,7 +62,7 @@ ROOT_URLCONF = 'projetMairie.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,22 +71,26 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            #'libraries': {
+           #     'crispy_forms_tags': 'crispy_forms.templatetags.crispy_forms_tags',
+           # },
         },
     },
 ]
 
 WSGI_APPLICATION = 'projetMairie.wsgi.application'
-
+#CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mairie',
-        'USER': 'oupere',
-        'PASSWORD': 'oupere',
+        #'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'concours',
+        'USER': 'utilisateur',
+        'PASSWORD': 'utilisateur',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -137,3 +148,35 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# Ajoutez ces lignes en haut du fichier pour importer les bibliothèques nécessaires
+from ctypes.util import find_library
+
+import os
+from django.contrib.gis import gdal
+
+# Configuration de GDAL_LIBRARY_PATH
+# Set GDAL_LIBRARY_PATH if GDAL is installed
+if find_library('gdal'):
+    GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH', '')
+else:
+    raise OGRException('GDAL is not installed')
+
+# Configuration de GEOS_LIBRARY_PATH
+GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH', '')
+
+# Configuration de GDAL_DATA
+GDAL_DATA = os.getenv('GDAL_DATA', '')
+
+
+
+#GOOGLE_MAPS_API_KEY = 'AIzaSyCIBX9BJO-fPv7OyJLMsWUCQuv9JbH15SE'
+GOOGLE_MAPS_JS_API_KEY = 'AIzaSyCIBX9BJO-fPv7OyJLMsWUCQuv9JbH15SE'
+
+GOOGLE_MAPS = {
+    'api_key': GOOGLE_MAPS_JS_API_KEY,
+    'language': 'fr-FR',
+    'region': 'fr',
+}
