@@ -72,8 +72,8 @@
           <li><a href="{% url 'pub' %}">Portfolio</a></li>
           <li><a href="{% url 'team' %}">Équipe</a></li>
           <!-- <li><a href="blog.html">Blog</a></li> -->
-          <li class="dropdown"><a href="#"><span>Signaler un dégat</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-            <ul>
+          <li class="dropdown"><a href="{% url 'signalement' %}"><span>Signaler un dégat</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <!-- <ul>
               <li><a href="#">Degat</a></li>
               <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
                 <ul>
@@ -87,7 +87,7 @@
               <li><a href="#">Drop Down 2</a></li>
               <li><a href="#">Drop Down 3</a></li>
               <li><a href="#">Drop Down 4</a></li>
-            </ul>
+            </ul> -->
           </li>
           <li><a href="{% url 'contact' %}">Contactez-nous</a></li>
         </ul>

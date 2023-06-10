@@ -1,6 +1,6 @@
 from django.db import models
 
-from django.db import models
+from django.utils import timezone
 
 class Service(models.Model):
     nom = models.CharField(max_length=255)
@@ -15,6 +15,8 @@ class Employe(Citoyen):
     date_naisse = models.DateField()
     salaire = models.PositiveIntegerField()
 
+from django.contrib.gis.db import models
+
 class Signalement(models.Model):
     TYPES_SIGNALEMENT = (
         ('type1', 'Type 1'),
@@ -22,10 +24,11 @@ class Signalement(models.Model):
         ('type3', 'Type 3'),
     )
     description = models.TextField()
-    date_signalement = models.DateField()
+    date_signalement = models.DateTimeField(default=timezone.now)
     etat_signalement = models.CharField()
     lieu = models.CharField()
     type_signalement = models.CharField(max_length=20, choices=TYPES_SIGNALEMENT)
+    location = models.PointField()
     citoyen = models.ForeignKey(Citoyen, on_delete=models.CASCADE, related_name='signalements')
 
 class Travail(models.Model):

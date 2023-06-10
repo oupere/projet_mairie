@@ -1,0 +1,20 @@
+{% load static %}
+{{ form.media }}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ma carte</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_JS_API_KEY }}&callback=initMap" async defer></script>
+    <script type="text/javascript" src="{% static 'js/google-maps-point-widget.js' %}"></script>
+  </head>
+  <body>
+    <h4>Nouveau signalement</h4>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div id="google-map-widget" style="height: 400px;"></div>
+      <button type="submit">Envoyer</button>
+    </form>
+  </body>
+</html>
