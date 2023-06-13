@@ -1,0 +1,50 @@
+{% extends 'accueil/index.html' %}
+{% load static %}
+
+{% block body %}
+<div class="mb-4"></div>
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <form method="POST" enctype="multipart/form-data"  action="{% url 'suivi' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="numero_confirmation">Numéro de confirmation :</label>
+                    <input type="text" id="numero_confirmation" name="numero_confirmation" required class="form-control form-control-lg font-weight-bold">
+                    <div style="height: 50px;"></div>
+                </div>
+                <div>
+                    
+                    <button type="submit" class="btn btn-success btn-lg">
+                       <i class="bi bi-airplane"></i>
+                       <span class="font-weight-bold">Suivre</span>
+                    </button>
+                </div>
+               
+            </form>
+            {% if ntrouve %}
+                <div style="height: 50px;"></div>
+                <p>{{ ntrouve }}</p>
+            {% endif %}
+          
+                <div style="height: 50px;"></div>
+                <p><span class="font-weight-bold">État de la demande :</span> {{ demande.etat }}</p>
+                {% if demande.etat == "Traité" %}
+
+                    {% if demande.recup and demande.filerecup %}
+                        {% if valft %}
+                            <p>Le fichier a déjà été téléchargé.</p>
+                        {% else %}
+                            <a href="{{ demande.filerecup.url }}" class="btn btn-primary" download>Télécharger le fichier de récupération</a>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <p>La demande n'est pas encore traitée.</p>
+                {% endif %}
+        </div>
+            
+    </div>
+    <div style="height: 50px;"></div>
+
+
+{% endblock %}
