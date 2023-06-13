@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block body %}
+    <div id="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <br>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h3> Ajout des analyses
+                        <a class="btn btn-sm btn-success" href="{% url 'patients' %}" style="padding: 8px; float: right; background-color: green; color: white;"><i class="fas fa-chevron-left fa-lg"></i>
+                          Retour</a></h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <fieldset>
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                        </fieldset>
+                        <button  class="btn btn-primary" type="submit"><i class="fas fa-database"></i> Enrégistrer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+</script>

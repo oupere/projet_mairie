@@ -1,0 +1,107 @@
+{% block body %}
+    <div id="content-wrapper">
+        <div class="container-fluid">
+           <br>
+            <div class="card mb-3">
+                <div class="card-header"> <h3>
+                  {%if patient.sexe == 'M'%}
+                  Détail du Mr {{ patient.nom }} {{ patient.prenom }}
+                {%else%}
+                Détail du Mme {{ patient.nom }} {{ patient.prenom }}
+                {%endif%}
+                    <a class="btn btn-sm btn-success" href="{% url 'patients' %}" style="padding: 8px; float: right; background-color: green; color: white;"><i class="fas fa-chevron-left fa-lg"></i>
+                      Retour</a>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    <div class="table-responsive">
+                        
+                      
+                      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                          <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Contact</th>
+                            <th>Sexe</th>
+                            <th>Âge</th>
+                            <th>Aresse</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                  <td>{{ patient.nom }}</td>
+                                  <td>{{ patient.prenom }}</td>
+                                  <td>{{ patient.contact }}</td>
+                                  <td>{{ patient.sexe }}</td>
+                                  <td>{{ patient.age}}</td>
+                                  <td>{{ patient.adresse }}</td>
+                                
+                            </tr>
+                         
+                        </tbody>
+                      </table>
+                      <h4>Analyses</h4>
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Nom</th>
+                              <th>Reference</th>
+                              <th>Coût</th>
+                              <th>Etat</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for analyse in analyses %}
+                            <tr>
+                              <td>{{ analyse.nom }}</td>
+                              <td>{{ analyse.valReference }}</td>
+                              <td>{{ analyse.cout }}</td>  
+                              <td>
+                                {% for analyse_patient in analyse.analysepatient_set.all %}
+                                  {% if analyse_patient.patient == patient %}
+                                    {{ analyse_patient.etat }}
+                                  {% endif %}
+                                {% endfor %}
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>   
+                    </div>
+                      
+                    {% if is_paginated %}
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&laquo;</span></li>
+                                {% endif %}
+                                {% for i in paginator.page_range %}
+                                {% if page_obj.number == i %}
+                                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                {% else %}
+                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&raquo;</span></li>
+                                {% endif %}
+                            </ul>
+                    {% endif %}
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </tbody>
+</table>
+{% endblock %}

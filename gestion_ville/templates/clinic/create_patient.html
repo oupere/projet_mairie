@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block body %}
+    <div id="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+          <br>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h3> Enrégistrement d'un patient
+                    <a class="btn btn-sm btn-success" href="{% url 'patients' %}" style="padding: 8px; float: right; background-color: green; color: white;"><i class="fas fa-chevron-left fa-lg"></i>
+                      Retour</a></h3>
+                </div>
+                <div class="card-body">
+                  <form class="form-horizontal"  action="#" method="POST">
+                    {% csrf_token %}
+
+                    <div class="form-group row">
+                        <label for="{{ form.nom.id_for_label }}" class="col-md-2 col-form-label">Nom:</label>
+                        <div class="col-md-10">
+                            {{ form.nom }}
+                            {{ form.nom.errors }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="{{ form.prenom.id_for_label }}" class="col-md-2 col-form-label">Prénom:</label>
+                        <div class="col-md-10">
+                            {{ form.prenom }}
+                            {{ form.prenom.errors }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="{{ form.contact.id_for_label }}" class="col-md-2 col-form-label">Contact:</label>
+                        <div class="col-md-10">
+                            {{ form.contact }}
+                            {{ form.contact.errors }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="{{ form.sexe.id_for_label }}" class="col-md-2 col-form-label">Sexe:</label>
+                        <div class="col-md-10">
+                            {{ form.sexe }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="{{ form.age.id_for_label }}" class="col-md-2 col-form-label">Âge:</label>
+                        <div class="col-md-10">
+                            {{ form.age }}
+                            {{ form.age.errors }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="{{ form.adresse.id_for_label }}" class="col-md-2 col-form-label">Adresse:</label>
+                        <div class="col-md-10">
+                            {{ form.adresse }}
+                            {{ form.adresse.errors }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="{{ form.analyses.id_for_label }}" class="col-md-2 col-form-label">Analyses:</label>
+                        <div class="col-md-10">
+                            {{ form.analyses }}
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-database"></i> Enrégistrer &nbsp;&nbsp;&nbsp;<span></span></button>                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

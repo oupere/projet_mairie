@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supp</title>
+</head>
+<body>
+
+  <p>Êtes-vous sûr de vouloir supprimer les résultats d'analyse de {{ patient }} ?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Supprimer</button>
+    <a href="{% url 'liste_patients_avec_resultats' %}">Annuler</a>
+  </form>
+
+    
+</body>
+</html>
