@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gestion_ville',
+    'gestion_ville.templatetags',
     'django.contrib.gis',
     'leaflet',
+    'shapely',
     'django_google_maps',
     'mapwidget',
     #'crispy_forms'
@@ -172,11 +175,16 @@ GDAL_DATA = os.getenv('GDAL_DATA', '')
 
 
 
-#GOOGLE_MAPS_API_KEY = 'AIzaSyCIBX9BJO-fPv7OyJLMsWUCQuv9JbH15SE'
-GOOGLE_MAPS_JS_API_KEY = 'AIzaSyCIBX9BJO-fPv7OyJLMsWUCQuv9JbH15SE'
+#GOOGLE_MAPS_API_KEY = 'AIzaSyBPB1D4ZyYB0zOIv9O3CNJyitnQSiGnpYc'
+GOOGLE_MAPS_JS_API_KEY = 'AIzaSyBPB1D4ZyYB0zOIv9O3CNJyitnQSiGnpYc'
 
 GOOGLE_MAPS = {
     'api_key': GOOGLE_MAPS_JS_API_KEY,
     'language': 'fr-FR',
-    'region': 'fr',
+    'region': 'tg',
+    'center': {
+        'lat': 8.9833,
+        'lng': 1.1333,
+    },
 }
+

@@ -1,35 +1,37 @@
-""" from django.contrib.gis import forms
-from .models import Signalement, Citoyen
+from django.contrib.gis import forms
+from .models import Employe, Signalement, Citoyen, Travail
 from mapwidgets.widgets import GooglePointFieldWidget
+from django.forms import TextInput
+from django.contrib.gis.forms.widgets import BaseGeometryWidget
 
 
-class SignalementForm(forms.ModelForm):
+""" class SignalementForm(forms.ModelForm):
     class Meta:
         model = Signalement
         fields = ['description', 'date_signalement', 'etat_signalement', 'lieu', 'type_signalement', 'location']
         widgets = {
             'location': GooglePointFieldWidget,
         }
-        #gis_models.PointField: {'widget': GooglePointFieldWidget}
+        gis_models.PointField: {'widget': GooglePointFieldWidget}
 
 class CitoyenForm(forms.ModelForm):
     class Meta:
         model = Citoyen
-        fields = ['nom', 'adresse', 'telephone']
+        fields = ['nom', 'adresse', 'telephone'] """
 
 
- """
+ 
  
 from .models import Signalement, Citoyen
 
 from django import forms
 from django.forms.widgets import TextInput
 
-class GoogleMapsPointWidget(TextInput):
+class GoogleMapsPointWidget(TextInput, BaseGeometryWidget):
     class Media:
         js = (
-            'https://maps.googleapis.com/maps/api/js?key=AIzaSyCIBX9BJO-fPv7OyJLMsWUCQuv9JbH15SE',
-            'js/google-maps-point-widget.js',
+            'https://maps.googleapis.com/maps/api/js?key=AIzaSyBPB1D4ZyYB0zOIv9O3CNJyitnQSiGnpYc',
+            'assets/js/google-maps-point-widget.js',
         )
 
     def __init__(self, attrs=None, **kwargs):
@@ -52,7 +54,54 @@ class GoogleMapsPointWidget(TextInput):
     
 class SignalementForm(forms.ModelForm):
     location = forms.CharField(widget=GoogleMapsPointWidget)
+    
+    TYPES_SIGNALEMENT = (
+        ('accident', 'Accident de la circulation'),
+        ('nuisances', 'Nuisances sonores'),
+        ('degradation', 'Dégradation des espaces publics'),
+        ('eclairage', 'Pannes d\'éclairage public'),
+        ('assainissement', 'Problèmes d\'assainissement'),
+        ('graffiti', 'Tags et graffiti'),
+        ('dechets', 'Dépôts sauvages de déchets'),
+        ('infrastructures', 'Dommages aux infrastructures publiques'),
+        ('vandalisme', 'Vandalisme'),
+        ('stationnement', 'Problèmes de stationnement'),
+    )
+    
+    type_signalement = forms.ChoiceField(choices=TYPES_SIGNALEMENT, initial='tototo', widget=forms.Select(attrs={'class': 'form-control'}))
+
 
     class Meta:
         model = Signalement
-        fields = ['description', 'date_signalement', 'etat_signalement', 'lieu', 'type_signalement', 'location']
+        fields = ['description', 'lieu', 'type_signalement', 'location']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['description'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Description'})
+        self.fields['lieu'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Quartier'})
+        self.fields['type_signalement'].widget.attrs.update({'class': 'form-control'})
+        self.fields['location'].widget.attrs.update({'class': 'form-control'})
+
+
+class CitoyenForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['nom'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Nom'})
+        self.fields['adresse'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Adresse'})
+        self.fields['telephone'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Téléphone'})
+
+    class Meta:
+        model = Citoyen
+        fields = ['nom', 'adresse', 'telephone']
+        
+        
+class TravailForm(forms.ModelForm):
+    employes = forms.ModelMultipleChoiceField(
+        queryset=Employe.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Travail
+        exclude = ['etat_davancement']

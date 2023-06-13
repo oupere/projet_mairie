@@ -4,11 +4,14 @@ from django.contrib.gis import forms
 from .models import Signalement, Citoyen
 
 
+from django.forms import TextInput
+from django.forms.widgets import Widget
+
 class GoogleMapsPointWidget(TextInput):
     class Media:
         js = (
-            'https://maps.googleapis.com/maps/api/js?key=AIzaSyCIBX9BJO-fPv7OyJLMsWUCQuv9JbH15SE&callback=initMap',
-            'js/google-maps-point-widget.js',
+            'https://maps.googleapis.com/maps/api/js?key=AIzaSyBPB1D4ZyYB0zOIv9O3CNJyitnQSiGnpYc&callback=initMap',
+            'assets/js/google-maps-point-widget.js',
         )
 
     def __init__(self, attrs=None):
@@ -16,19 +19,19 @@ class GoogleMapsPointWidget(TextInput):
             attrs = {}
         attrs['readonly'] = 'readonly'
         super().__init__(attrs=attrs)
+        
+    def get_context(self, name, value, attrs=None):
+        attrs = self.build_attrs(attrs)
+        context = super().get_context(name, value, attrs)
+        return context
 
-    def build_attrs(self, attrs=None, ):
-        attrs = super().build_attrs(attrs=attrs)
-        attrs['id'] = 'id_location'
-        attrs['class'] = 'google-maps-point-widget'
-        return attrs
 
 class SignalementForm(forms.ModelForm):
     class Meta:
         model = Signalement
-        fields = ['description', 'date_signalement', 'etat_signalement', 'lieu', 'type_signalement', 'location']
+        exclude = ['date_signalement', 'etat_signalement']  # Exclure les champs du formulaire
         widgets = {
-            'location': GooglePointFieldWidget,
+            'location': GoogleMapsPointWidget(),
         }
 
     def __init__(self, *args, **kwargs):

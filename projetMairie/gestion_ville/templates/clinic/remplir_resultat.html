@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>note</title>
+</head>
+<body>
+    <h1>Saisi du Résultat</h1>
+    <form name="note" method="post" action="">
+    {% csrf_token %}
+    <label>Résultat</label>
+    <input name="resultat" id="resultat">
+    <input name="interpretation" id="interpretation">
+
+    <button type="submit">Save</button>
+    </form>
+</body>
+</html>

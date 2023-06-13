@@ -1,0 +1,26 @@
+<h1>La liste des élèves</h1><br>
+<div>
+    <br/>
+    <table border=1>
+        <thead>
+            <tr>
+                <td>Ientifiant</td>
+                <td>Nom</td>
+                <td>prenom</td>
+                <td>Sexe</td>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in test %}
+                <tr>
+                  <td>{{t.id}}</td>
+                  <td>{{t.analyse}}</td>
+                  <td>{{t.resultat}}</td>
+                  <td>{{t.interpretation}}</td>
+                </tr>
+                {% endfor%}
+                </tbody>
+            </table>
+            </div>
+		

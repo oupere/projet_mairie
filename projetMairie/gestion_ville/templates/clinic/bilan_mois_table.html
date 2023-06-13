@@ -1,0 +1,81 @@
+{% block body %}
+    <div id="content-wrapper">
+        <div class="container-fluid">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="">Bilan du coût des analyses</a>
+                </li>
+            </ol>
+            <div class="card mb-3">
+                <div class="card-header">
+                   
+                    <a class="btn btn-sm btn-w" href="{% url 'dashboard' %}"  style="padding: 8px; float: right; background-color: green; color: white;"><i class="fas fa-arrow-left"></i> Retour</a>
+                    <a class="btn btn-sm btn-primary" href="{% url 'bilan_hebdomadaire' %}"  style="padding: 8px; float: left; background-color: #3e9bde; color: white;"><i class="fas fa-calculator text-white"></i> Bilan hebdomadaire</a>
+                    <a class="btn btn-sm btn-primary" href="{% url 'bilan_quotidien' %}" style="padding: 8px; float: left; background-color: #3e9bde; color: white; margin-left: 10px;"><i class="fas fa-calculator text-white"></i> Bilan quotidien</a>
+            
+                </div>
+                <div class="card-body">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    <div class="table-responsive">
+
+                            
+                      <h3>Bilan mensuel</h3>                    
+                      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                          <th>Analyse</th>
+                          <th>Nombre de résultats</th>
+                            <th>Coût total</th>                           
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                            {% if bilan_mensuel %}
+                                {% for b in bilan_mensuel %}
+                                    <tr>
+                                      <td>{{ b.analyse__nom }}</td>
+                                      <td>{{ b.total }}</td>
+                                      <td>{{ b.cout_total }}</td>                                       
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+
+
+
+
+                    {% if is_paginated %}
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&laquo;</span></li>
+                                {% endif %}
+                                {% for i in paginator.page_range %}
+                                {% if page_obj.number == i %}
+                                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                {% else %}
+                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&raquo;</span></li>
+                                {% endif %}
+                            </ul>
+                    {% endif %}
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </tbody>
+</table>
+{% endblock %}
