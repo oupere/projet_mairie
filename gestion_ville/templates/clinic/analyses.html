@@ -1,0 +1,35 @@
+<h1>La liste des analyses</h1><br>
+<div>
+    <table border=1>
+        <thead>
+            <tr>
+                <td>Identifiant</td>
+                <td>Nom</td>
+                <td>Cout</td>
+                <td>valeur de Reference</td>
+                <td>Methode</td>
+                <td>Departement</td>
+
+    
+
+
+              
+            </tr>
+        </tr>
+        </thead>
+        <tbody>
+            {% for analyse in liste_analyses %}
+                <tr>
+                    <td>{{analyse.id}}</td>
+                    <td>{{analyse.nom}}</td>
+                    <td>{{analyse.cout}}</td>
+                    <td>{{analyse.valReference}}</td>
+                    <td>{{analyse.methode}}</td>
+                    <td>{{analyse.departement}}</td>
+                                
+                </tr>
+                {% endfor%}
+                </tbody>
+            </table>
+            </div>
+		

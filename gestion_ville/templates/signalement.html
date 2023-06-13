@@ -1,4 +1,7 @@
-{% load static %}
+{% extends 'accueil/index.html' %}
+
+<!-- {% load static %}
+{% load leaflet_tags %}
 {{ form.media }}
 <!DOCTYPE html>
 <html>
@@ -6,15 +9,192 @@
     <meta charset="utf-8">
     <title>Ma carte</title>
     <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_JS_API_KEY }}&callback=initMap" async defer></script>
-    <script type="text/javascript" src="{% static 'js/google-maps-point-widget.js' %}"></script>
   </head>
   <body>
     <h4>Nouveau signalement</h4>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <div id="google-map-widget" style="height: 400px;"></div>
+      <div id="map" style="height: 400px;"></div>
+      <button type="button" onclick="toggleCitoyenForm()">Continue</button>
+      <div id="citoyen-form" style="display:none">
+        <h4>Informations sur le citoyen</h4>
+        <form method="post" id="citoyen-form-inner">
+          {% csrf_token %}
+          {{ citoyen_form.as_p }}
+          <button type="submit">Enregistrer</button>
+    </form>
+      </div> -->
+      <!-- <button type="submit">Envoyer</button> -->
+    <!-- </form>
+  </body>
+  <script>
+    function toggleCitoyenForm() {
+      var x = document.getElementById("citoyen-form");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+  </script>
+</html> -->
+{% comment %} {% load static %}
+{% load leaflet_tags %}
+{{ form.media }}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ma carte</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <style>
+      #map {
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <h4>Nouveau signalement</h4>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div id="map"></div>
+      <button type="button" onclick="toggleCitoyenForm()">Continue</button>
+      <div id="citoyen-form" style="display:none">
+        <h4>Informations sur le citoyen</h4>
+        <form method="post" id="citoyen-form-inner">
+          {% csrf_token %}
+          {{ citoyen_form.as_p }}
+          <button type="submit">Enregistrer</button>
+        </form>
+      </div>
+      <input type="hidden" name="longitude" id="longitude" value="{{ form.initial.longitude }}">
+      <input type="hidden" name="latitude" id="latitude" value="{{ form.initial.latitude }}">
       <button type="submit">Envoyer</button>
     </form>
+    <script>
+      var map = L.map('map').setView([{{ form.initial.latitude }}, {{ form.initial.longitude }}], 13);
+      var marker = L.marker([{{ form.initial.latitude }}, {{ form.initial.longitude }}], { draggable: true }).addTo(map);
+
+      map.on('click', function(e) {
+        var latlng = e.latlng;
+        marker.setLatLng(latlng);
+        document.getElementById('latitude').value = latlng.lat;
+        document.getElementById('longitude').value = latlng.lng;
+      });
+      
+      function toggleCitoyenForm() {
+        var x = document.getElementById("citoyen-form");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+    </script>
   </body>
 </html>
+
+  8.971717135378578,1.1313021183013916
+  1.1438100005465368 8.98157655
+ {% endcomment %}
+{% block body %}
+{% load custom_filters %}
+
+{% load static %}
+{% load leaflet_tags %}
+{{ form.media }}
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_JS_API_KEY }}&callback=initMap" async defer></script>
+    <h4 style="font-size: 24px; color: #008d7d; text-align: center; margin-bottom: 30px;">SIGNALEMENT D'INCIDENT OU DE PROBLÈME</h4>
+    <div class="col-lg-8 mx-auto">
+      <form method="post">
+        <div class="row">
+          <div class="form-group mt-3">
+            {{ form.type_signalement }}
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="form-group mt-3">
+            {{ form.description }}
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="form-group mt-3">
+            {{ form.lieu }}
+          </div>
+        </div>
+          
+        <div class="row">
+          <div class="form-group mt-3">
+            {{ form.location }}
+          </div>
+        </div>
+    
+        <div class="row">
+          <div id="map" class="form-group mt-3" style="height: 600px;"></div>
+      </div>
+    
+        <button type="button" onclick="toggleCitoyenForm()" class="btn btn-primary form-control btn-success mt-5 mb-5" style="background-color: #008d7d;">Informations personnelles</button>
+    
+        <div id="citoyen-form" style="display: none;">
+          <h4 class="center" style="font-size: 24px; color: #008d7d; text-align: center; margin-bottom: 30px;">VEUILLEZ FOURNIR VOS INFORMATIONS POUR NOUS PERMETTRE DE VOUS CONTACTER SI NÉCESSAIRE</h4>
+    
+          <form method="post" id="citoyen-form-inner">
+            {% csrf_token %}
+            <div class="form-group">
+              {{ citoyen_form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary form-control btn-success mt-5 mb-5" style="background-color: #008d7d;">Enregistrer</button>
+          </form>
+        </div>
+      </form>
+    </div>
+
+
+    
+    <script>
+      function toggleCitoyenForm() {
+        var x = document.getElementById("citoyen-form");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+    </script>
+
+    <script>
+      function initMap() {
+          var latitude = 8.9833; // Latitude de Sokodé
+          var longitude = 1.1333; // Longitude de Sokodé
+  
+          var map = L.map('map').setView([latitude, longitude], 16); // 14 est le niveau de zoom initial
+  
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '© OpenStreetMap contributors'
+          }).addTo(map);
+
+        // Ajouter un événement de clic à la carte
+        map.on('click', function(e) {
+          var latitude = e.latlng.lat;
+          var longitude = e.latlng.lng;
+          var locationField = document.getElementById('id_location');
+          locationField.value = latitude + ', ' + longitude;
+      });
+
+      }
+  </script>
+  
+  
+  
+  <script>
+      initMap();
+  </script>
+  
+    
+  {% endblock %}

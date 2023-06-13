@@ -1,0 +1,95 @@
+{% block body %}
+    <div id="content-wrapper">
+        <div class="container-fluid">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <h4>Modifier les informations du {{ patient }}</h4>
+                </li>
+            </ol>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    Information
+                    <a class="btn btn-sm btn-success" href="{% url 'patients' %}" style="padding: 8px; float: right; background-color: green; color: white;">Retour</a>
+                </div>
+                <div class="card-body">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    <div class="table-responsive">
+                        
+                      <form method="post">
+                        {% csrf_token %}
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>prénom</th>
+                                    <th>Contact</th>
+                                    <th>Sexe</th>
+                                    <th>Adresse</th>
+                                    <th>Age</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" name="nom" value="{{ patient.nom }}"></td>
+                                    <td><input type="text" name="prenom" value="{{ patient.prenom }}"></td>
+                                    <td><input type="text" name="contact" value="{{ patient.contact }}"></td>
+                                    <td><input type="text" name="sexe" value="{{ patient.sexe }}"></td>
+                                    <td><input type="text" name="adresse" value="{{ patient.adresse }}"></td>
+                                    <td><input type="number" name="age" value="{{ patient.age }}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    
+                        
+                        <p>Analyses</p>
+
+                        <div class="checkboxes-container">
+                          {% for analyse in analyses %}
+                            <label class="checkbox-inline">
+                              <input type="checkbox" name="analyses" value="{{ analyse.id }}" {% if analyse in selected_analyses %}checked{% endif %}>
+                              {{ analyse }}
+                            </label>
+                          {% endfor %}
+                        </div>
+                                                
+                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                    </form>
+                    
+
+
+                      
+                    {% if is_paginated %}
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&laquo;</span></li>
+                                {% endif %}
+                                {% for i in paginator.page_range %}
+                                {% if page_obj.number == i %}
+                                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                {% else %}
+                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&raquo;</span></li>
+                                {% endif %}
+                            </ul>
+                    {% endif %}
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </tbody>
+</table>
+{% endblock %}

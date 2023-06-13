@@ -1,0 +1,94 @@
+{% block body %}
+    <div id="content-wrapper">
+        <div class="container-fluid">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="">La liste des patients avec résultats</a>
+                </li>
+            </ol>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    Information
+                    <a class="btn btn-sm btn-success" href="{% url 'liste_patients_non_traite' %}" style="padding: 8px; float: right; background-color: green; color: white;"><i class="fas fa-plus"></i>Ajouter un résultat</a>
+                </div>
+                <div class="card-body">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th style="text-align: center;">Actions</th>                              
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% if patients %}
+                                    {% for patient in patients %}
+                                        <tr>
+                                            <td>{{ patient.nom }} {{ patient.prenom }}</td>
+
+                                            <td style="text-align: center;">                                       
+                                                <button type="button" class="bs-modal read-book btn btn-sm btn-primary">
+                                                    <a style="color: blanchedalmond;" href="{% url 'patient_analyses' patient.id %}">
+                                                        <span class="fa fa-eye"></span>Afficher                
+                                                    </a>
+                                                </button>
+
+                                                <button type="button" class="bs-modal read-book btn btn-sm btn-dark">
+                                                    <a  style="color: blanchedalmond;" href="{% url 'resultat_patient' patient.id %}">
+                                                        <span class="fas fa-download"></span>Imprimer  
+                                                    </a>
+                                                </button>
+                                        
+                                                <button type="button" class="update-book btn btn-sm btn-warning">
+                                                    <a  style="color: blanchedalmond;" href="{% url 'modifier_resultats' patient.id %}">
+                                                    <span class="fa fa-pencil"> Modifier</span>
+                                                </button>
+                                                
+                                                <button type="button" class="bs-modal delete-book btn btn-sm btn-danger" data-form-url="{% url 'supprimer_resultats_patient' patient.id %}">
+                                                    <span class="fa fa-trash"> Supprimer</span>
+                                                </button>
+                                            </td> 
+
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                    {% if is_paginated %}
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&laquo;</span></li>
+                                {% endif %}
+                                {% for i in paginator.page_range %}
+                                {% if page_obj.number == i %}
+                                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                {% else %}
+                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&raquo;</span></li>
+                                {% endif %}
+                            </ul>
+                    {% endif %}
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </tbody>
+</table>
+{% endblock %}

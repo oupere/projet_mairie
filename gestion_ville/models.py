@@ -4,6 +4,12 @@ import os
 from django.core.exceptions import ValidationError
 from django.contrib.gis.db import models
 
+def validate_file_extension(value):
+    ext = os.path.splitext(value.name)[1]  # Récupérer l'extension du fichier
+    valid_extensions = ['.pdf', '.png', '.jpg', '.jpeg', '.webp']
+    if ext.lower() not in valid_extensions:
+        raise ValidationError('Seuls les fichiers PDF et les images (png, jpg, jpeg) sont autorisés.')
+    
 class Service(models.Model):
     nom = models.CharField(max_length=255)
 
@@ -24,31 +30,38 @@ class Employe(Citoyen):
 
 class Signalement(models.Model):
     TYPES_SIGNALEMENT = (
-        ('type1', 'Type 1'),
-        ('type2', 'Type 2'),
-        ('type3', 'Type 3'),
+        ('accident', 'Accident de la circulation'),
+        ('nuisances', 'Nuisances sonores'),
+        ('degradation', 'Dégradation des espaces publics'),
+        ('eclairage', 'Pannes d\'éclairage public'),
+        ('assainissement', 'Problèmes d\'assainissement'),
+        ('graffiti', 'Tags et graffiti'),
+        ('dechets', 'Dépôts sauvages de déchets'),
+        ('infrastructures', 'Dommages aux infrastructures publiques'),
+        ('vandalisme', 'Vandalisme'),
+        ('stationnement', 'Problèmes de stationnement'),
     )
     description = models.TextField()
     date_signalement = models.DateTimeField(default=timezone.now)
-    etat_signalement = models.CharField()
-    lieu = models.CharField()
+    etat_signalement = models.CharField(max_length=50, default='en cours')
+    lieu = models.CharField(max_length=100)
     type_signalement = models.CharField(max_length=20, choices=TYPES_SIGNALEMENT)
     location = models.PointField()
     citoyen = models.ForeignKey(Citoyen, on_delete=models.CASCADE, related_name='signalements')
+    
+    def __str__(self):
+        return f"Signalement {self.pk}: {self.get_type_signalement_display()}"
 
 class Travail(models.Model):
     description = models.TextField()
-    date_debut = models.DateField()
-    date_fin_prevue = models.DateField()
-    etat_davancement = models.PositiveIntegerField()
+    etat_davancement = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     signalements = models.ManyToManyField(Signalement, related_name='travaux')
     employes = models.ManyToManyField(Employe, related_name='travaux')
 
-def validate_file_extension(value):
-    ext = os.path.splitext(value.name)[1]  # Récupérer l'extension du fichier
-    valid_extensions = ['.pdf', '.png', '.jpg', '.jpeg', '.webp']
-    if ext.lower() not in valid_extensions:
-        raise ValidationError('Seuls les fichiers PDF et les images (png, jpg, jpeg) sont autorisés.')
+    def __str__(self):
+        return f"Travail {self.pk}: {self.description}"
+
+
 
 class Demande(models.Model):
     type = models.TextField()
@@ -65,3 +78,5 @@ class Demande(models.Model):
 
     def __str__(self):
         return self.etat
+    
+
