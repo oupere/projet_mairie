@@ -1,0 +1,39 @@
+{% extends 'accueil/index.html' %}
+{% load static %}
+
+{% block body %}
+<table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Numéro</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Auteur</th>
+        <th>Etat de la demande</th>
+        <th>Action</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      {% for demande in demandes %}
+        <tr>
+          <td>{{ demande.id }}</td>
+          <td>{{ demande.date }}</td>
+          <td>{{ demande.type }}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <span>{{ demande.citoyen }}</span>
+            </div>
+          </td>
+          <td>{{ demande.etat }}</td>
+          <td>
+            <div class="d-flex align-items-center">
+                <a href="{% url 'modifier_demande' demande.id %}">Gérer->:</a>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+{% endblock %}
